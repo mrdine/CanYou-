@@ -5,7 +5,7 @@ using UnityEngine;
 public class player : MonoBehaviour {
 
     // velocidade do player
-    float vel = 3f;
+    float vel = 5f;
 
     public bool face = true;
     public Transform heroiT;
@@ -16,8 +16,12 @@ public class player : MonoBehaviour {
 
     public Animator anim;
     public bool vivo = true;
+    public int vidas = 5;
 
     public bool liberaPulo = false;
+
+    public GameObject blood;
+
 	// Use this for initialization
 	void Start () {
 
@@ -35,8 +39,8 @@ public class player : MonoBehaviour {
         {
             movePlayer();
         }
-        
 
+        
 	}
 
 
@@ -62,6 +66,7 @@ public class player : MonoBehaviour {
             transform.Translate(new Vector3(vel * Time.deltaTime, 0, 0));
             anim.SetBool("Idle", false);
             anim.SetBool("Andar", true);
+            anim.SetBool("Agachado", false);
         }
         // esquerda
         else if (Input.GetKey(KeyCode.A))
@@ -69,12 +74,19 @@ public class player : MonoBehaviour {
             transform.Translate(new Vector3(-vel * Time.deltaTime, 0, 0));
             anim.SetBool("Idle", false);
             anim.SetBool("Andar", true);
+            anim.SetBool("Agachado", false);
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            anim.SetBool("Idle", false);
+            anim.SetBool("Agachado", true);
         }
 
         else
         {
             anim.SetBool("Idle", true);
             anim.SetBool("Andar", false);
+            anim.SetBool("Agachado", false);
         }
         // pular
         if (Input.GetKey(KeyCode.Space) && liberaPulo)
@@ -83,6 +95,7 @@ public class player : MonoBehaviour {
             anim.SetBool("Pulo", true);
             anim.SetBool("Idle", false);
             anim.SetBool("Andar", false);
+            anim.SetBool("Agachado", false);
         }
     }
 
@@ -105,6 +118,7 @@ public class player : MonoBehaviour {
             liberaPulo = true;
             anim.SetBool("Pulo", false);
             anim.SetBool("Idle", true);
+            anim.SetBool("Agachado", false);
         }
 
     }
@@ -115,7 +129,16 @@ public class player : MonoBehaviour {
         {
             liberaPulo = false;
             anim.SetBool("Andar", false);
+            anim.SetBool("Agachado", false);
         }
+    }
+
+
+    void morrer()
+    {
+        Instantiate(blood, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+
     }
 
 
