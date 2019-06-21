@@ -4,4 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/fasedificil.unity
+    guid: d8c5fccdeba55bc4eb3d305a12fbebdc
+  m_configObjects: {}

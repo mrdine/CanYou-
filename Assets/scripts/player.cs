@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class player : MonoBehaviour {
 
@@ -21,6 +22,8 @@ public class player : MonoBehaviour {
     public bool liberaPulo = false;
 
     public GameObject blood;
+
+    public GameObject tentar;
 
 	// Use this for initialization
 	void Start () {
@@ -120,6 +123,10 @@ public class player : MonoBehaviour {
             anim.SetBool("Idle", true);
             anim.SetBool("Agachado", false);
         }
+        if( outro.gameObject.CompareTag("enemy"))
+        {
+            morrer();
+        }
 
     }
 
@@ -139,9 +146,28 @@ public class player : MonoBehaviour {
         Instantiate(blood, transform.position, Quaternion.identity);
         Destroy(gameObject);
 
+        Instantiate(tentar, transform.position, Quaternion.identity);
+        
+
     }
 
+    
 
+    IEnumerator LoadYourAsyncScene(string cena)
+    {
+        // The Application loads the Scene in the background as the current Scene runs.
+        // This is particularly good for creating loading screens.
+        // You could also load the Scene by using sceneBuildIndex. In this case Scene2 has
+        // a sceneBuildIndex of 1 as shown in Build Settings.
 
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(cena);
 
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+    }
+
+    
 }
