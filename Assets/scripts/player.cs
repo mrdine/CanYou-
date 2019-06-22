@@ -123,7 +123,7 @@ public class player : MonoBehaviour {
             anim.SetBool("Idle", true);
             anim.SetBool("Agachado", false);
         }
-        if( outro.gameObject.CompareTag("enemy"))
+        if( outro.gameObject.CompareTag("enemy") || outro.gameObject.CompareTag("killpane"))
         {
             morrer();
         }
