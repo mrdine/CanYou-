@@ -6,7 +6,8 @@ public class LevelManager : MonoBehaviour
 {
     List<string> scenes = new List<string>(new string[]{
         "00",
-        "01"
+        "01",
+        "02"
     });
     int currentLevel = 0;
 
@@ -44,15 +45,17 @@ public class LevelManager : MonoBehaviour
 
     public void gameOver(){
         SceneHelper.GoToScene("you_died");
+        currentLevel = 0;
     }
 
     public void win(){
         SceneHelper.GoToScene("you_won");
+        currentLevel = 0;
     }
 
     public void nextLevel(){
+        currentLevel++;
         if (scenes.Count > currentLevel) {
-            currentLevel++;
             SceneHelper.GoToScene(scenes[currentLevel]);
         } else {
             Win();
