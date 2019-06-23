@@ -6,7 +6,8 @@ TagManager:
   tags:
   - chao
   - enemy
-  - killpane
+  - killplane
+  - winplane
   layers:
   - Default
   - TransparentFX
