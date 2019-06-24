@@ -14,17 +14,6 @@ install:
 script:
 - ./Scripts/build.sh
 deploy:
-  - provider: releases
-    name: $TRAVIS_BRANCH $(date +'%Y.%m.%d %H:%M')
-    api_key:
-      secure: $GITHUB_OAUTH_TOKEN
-    file:
-      - ./Build/linux.zip
-      - ./Build/mac.zip
-      - ./Build/windows.zip
-    skip_cleanup: true
-    on:
-      branch: master
   - provider: pages
     github-token:
       secure: $GITHUB_OAUTH_TOKEN
