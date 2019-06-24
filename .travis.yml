@@ -1,0 +1,35 @@
+language: objective-c
+osx_image: xcode8.3
+rvm:
+- 2.2
+cache:
+  directories:
+    - /Users/travis/.rvm/
+    - /Users/travis/Downloads/
+before_install:
+- chmod a+x ./Scripts/install.sh
+- chmod a+x ./Scripts/build.sh
+install:
+- ./Scripts/install.sh
+script:
+- ./Scripts/build.sh
+deploy:
+  - provider: releases
+    name: $TRAVIS_BRANCH $(date +'%Y.%m.%d %H:%M')
+    api_key:
+      secure: $GITHUB_OAUTH_TOKEN
+    file:
+      - ./Build/linux.zip
+      - ./Build/mac.zip
+      - ./Build/windows.zip
+    skip_cleanup: true
+    on:
+      branch: master
+  - provider: pages
+    github-token:
+      secure: $GITHUB_OAUTH_TOKEN
+    local-dir: ./Build/webgl
+    skip-cleanup: true
+    keep-history: true
+    on:
+      branch: master
