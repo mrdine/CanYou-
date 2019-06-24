@@ -7,7 +7,7 @@ public class BulletShooter : MonoBehaviour {
     public int fireIntervalInSeconds = 2;
     List<GameObject> liveBullets;
     const int maxLiveBullets = 5;
-    const float bulletVelocity = 10;
+    public float bulletVelocity = 10;
     bool readyToFire;
 
     void Start(){

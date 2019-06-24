@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -9,7 +10,6 @@ public class LevelManager : MonoBehaviour
         "01",
         "02"
     });
-    int currentLevel = 0;
 
     public static LevelManager instance;
 
@@ -45,18 +45,16 @@ public class LevelManager : MonoBehaviour
 
     public void gameOver(){
         SceneHelper.GoToScene("you_died");
-        currentLevel = 0;
     }
 
     public void win(){
         SceneHelper.GoToScene("you_won");
-        currentLevel = 0;
     }
 
     public void nextLevel(){
-        currentLevel++;
-        if (scenes.Count > currentLevel) {
-            SceneHelper.GoToScene(scenes[currentLevel]);
+        int currentLevel = scenes.IndexOf(SceneManager.GetActiveScene().name);
+        if (scenes.Count - 1 > currentLevel) {
+            SceneHelper.GoToScene(scenes[currentLevel + 1]);
         } else {
             Win();
         }

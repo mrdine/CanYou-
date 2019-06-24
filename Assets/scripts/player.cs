@@ -23,7 +23,16 @@ public class player : MonoBehaviour {
 
     public GameObject blood;
 
-    public GameObject tentar;
+    public AudioClip jumpSound;
+    public AudioClip dieSound;
+    public AudioClip bgMusic;
+    AudioSource audioPlayer;
+
+    void Awake(){
+        this.audioPlayer = GetComponent<AudioSource>();
+        audioPlayer.clip = bgMusic;
+        audioPlayer.Play();
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -92,6 +101,7 @@ public class player : MonoBehaviour {
         // pular
         if (Input.GetKey(KeyCode.Space) && liberaPulo)
         {
+            audioPlayer.PlayOneShot(jumpSound);
             heroiRB.AddForce(new Vector2(0, force), ForceMode2D.Impulse);
             anim.SetBool("Pulo", true);
             anim.SetBool("Idle", false);
@@ -141,10 +151,17 @@ public class player : MonoBehaviour {
         }
     }
 
-
     void morrer()
     {
+        audioPlayer.PlayOneShot(dieSound);
+        GetComponent<SpriteRenderer>().enabled = false;
         Instantiate(blood, transform.position, Quaternion.identity);
+        StartCoroutine("waitAndGameOver", 1);
+    }
+
+    private IEnumerator waitAndGameOver(int seconds){
+        yield return new WaitForSeconds(seconds);
+
         Destroy(gameObject);
         LevelManager.GameOver();        
     }
