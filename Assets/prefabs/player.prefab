@@ -133,9 +133,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a7a70e6459f3fd409f56dc62ed9bfd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vel: 5
   face: 1
   heroiT: {fileID: 0}
-  force: 4
+  force: 7
+  additionalForce: 5
   heroiRB: {fileID: 0}
   anim: {fileID: 0}
   vivo: 1

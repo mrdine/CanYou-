@@ -6,12 +6,13 @@ using UnityEngine.SceneManagement;
 public class player : MonoBehaviour {
 
     // velocidade do player
-    float vel = 5f;
+    public float vel = 5f;
 
     public bool face = true;
     public Transform heroiT;
 
-    public float force = 4;
+    public float force = 5;
+    public float additionalForce = 5;
     public Rigidbody2D heroiRB;
 
 
@@ -28,6 +29,9 @@ public class player : MonoBehaviour {
     public AudioClip bgMusic;
     AudioSource audioPlayer;
 
+    bool holdingJumpKey;
+    bool jumping;
+
     void Awake(){
         this.audioPlayer = GetComponent<AudioSource>();
         audioPlayer.clip = bgMusic;
@@ -41,7 +45,6 @@ public class player : MonoBehaviour {
         heroiRB = GetComponent<Rigidbody2D>();
 
         anim = GetComponent<Animator>();
-        force = 4;
 	}
 	
 	// Update is called once per frame
@@ -53,74 +56,43 @@ public class player : MonoBehaviour {
         }
 	}
 
+    void FixedUpdate(){
+        if(jumping){
+            heroiRB.AddForce(new Vector2(0, additionalForce));
+        }
+    }
+
 
     // movimentar player
     void movePlayer()
     {
-        // direita
-        if(Input.GetKey(KeyCode.D) && !face)
-        {
-            flip();
-            transform.Translate(new Vector3(vel * Time.deltaTime, 0, 0));
-        }
-        // esquerda
-        else if (Input.GetKey(KeyCode.A) && face)
-        {
-            flip();
-            transform.Translate(new Vector3(-vel * Time.deltaTime, 0, 0));
+        float movement = Input.GetAxisRaw("Horizontal");
+        heroiRB.velocity = new Vector2(movement * vel + Time.deltaTime, heroiRB.velocity.y);
+        anim.SetInteger("velocity", (int) movement);
+        if(movement != 0){
+            transform.localScale = new Vector3(movement, 1, 1);
         }
 
-        // direita
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.S))
         {
-            transform.Translate(new Vector3(vel * Time.deltaTime, 0, 0));
-            anim.SetBool("Idle", false);
-            anim.SetBool("Andar", true);
-            anim.SetBool("Agachado", false);
-        }
-        // esquerda
-        else if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(new Vector3(-vel * Time.deltaTime, 0, 0));
-            anim.SetBool("Idle", false);
-            anim.SetBool("Andar", true);
-            anim.SetBool("Agachado", false);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            anim.SetBool("Idle", false);
             anim.SetBool("Agachado", true);
-        }
-
-        else
-        {
-            anim.SetBool("Idle", true);
-            anim.SetBool("Andar", false);
+        } else {
             anim.SetBool("Agachado", false);
         }
         // pular
-        if (Input.GetKey(KeyCode.Space) && liberaPulo)
+        if (Input.GetKeyDown(KeyCode.Space) && liberaPulo)
         {
+            holdingJumpKey = true;
+            jumping = true;
             audioPlayer.PlayOneShot(jumpSound);
             heroiRB.AddForce(new Vector2(0, force), ForceMode2D.Impulse);
             anim.SetBool("Pulo", true);
-            anim.SetBool("Idle", false);
-            anim.SetBool("Andar", false);
-            anim.SetBool("Agachado", false);
+        } else if(Input.GetKeyUp(KeyCode.Space)){
+            jumping = false;
+            holdingJumpKey = false;
+            anim.SetBool("Pulo", false);
         }
     }
-
-    // girar player
-    void flip()
-    {
-        face = !face;
-
-        Vector3 scale = heroiT.localScale;
-        scale.x *= -1;
-        heroiT.localScale = scale;
-    }
-
-
 
     private void OnCollisionEnter2D(Collision2D outro)
     {
@@ -146,8 +118,6 @@ public class player : MonoBehaviour {
         if (outro.gameObject.CompareTag("chao"))
         {
             liberaPulo = false;
-            anim.SetBool("Andar", false);
-            anim.SetBool("Agachado", false);
         }
     }
 
